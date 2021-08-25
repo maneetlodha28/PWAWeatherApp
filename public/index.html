@@ -32,7 +32,7 @@
     <script>
       if('serviceWorker' in navigator){
         window.addEventListener('load', ()=>{
-          navigator.serviceWorker.register('./serviceworker.js').then(reg=>console.log("succes:",reg, reg.scope))
+          navigator.serviceWorker.register('./serviceworker.js').then(reg=>{})
         })
       }
     </script>

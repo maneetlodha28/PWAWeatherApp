@@ -29,9 +29,7 @@ html, body, #root {
   background: rgba(250, 250, 250, 0.85);
 }
 
-input, button{
-  vertical-align:middle;
-}
+
 .city {
   display: flex;
   align-items: center;

@@ -31,7 +31,7 @@ const  App = ()=> {
     }}
     onChange={e=>setSearchTerm(e.target.value)}
    />
-   <button style={{cursor:"pointer"}} onClick={()=>handleSearch(searchTerm)}>Search</button>
+   <button onClick={()=>handleSearch(searchTerm)}>Search</button>
 
    {weatherData.main&& (
      <div className='city'>
