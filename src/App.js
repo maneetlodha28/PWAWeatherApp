@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { weatherAPI } from './api/weather';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { locationAPI, weatherAPI } from './api/weather';
 
 import './App.css';
 
@@ -8,7 +8,7 @@ const  App = ()=> {
   const [searchTerm, setSearchTerm] = useState('')
 
   const [weatherData, setWeatherDate] = useState({})
-
+  const firstRun = useRef(true)
   const handleSearch = async(search)=>{
 
     weatherAPI(search).then(response=>{
@@ -16,6 +16,44 @@ const  App = ()=> {
     }).catch(err=>console.error(err))
   }
 
+ 
+  const  success = useCallback((pos)=> {
+    var crd = pos.coords;
+    locationAPI([crd.latitude, crd.longitude]).then(res=>handleSearch(res.data[0].locality))
+  },[])
+  
+  const errors = (err) =>{
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
+ useEffect(()=>{
+   if(firstRun.current) {
+  if (navigator.geolocation) {
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then(function (result) {
+        var options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        };
+        if (result.state === "granted") {
+          //If granted then you can directly call your function here
+          navigator.geolocation.getCurrentPosition(success);
+        } else if (result.state === "prompt") {
+          navigator.geolocation.getCurrentPosition(success, errors, options);
+        } else if (result.state === "denied") {
+          //If denied then you have to show instructions to enable location
+        }
+
+        
+      });
+  } else {
+    alert("Sorry Not available!");
+  }
+  firstRun.current=false;
+ }
+ },[success])
 
   return (
 
@@ -23,7 +61,7 @@ const  App = ()=> {
    <input
     type="text"
     className="search"
-    placeholder="search.."
+    placeholder="Enter City here.."
     value={searchTerm}
     onKeyUp={(e)=>{
       if(e.code==="Enter")
@@ -31,7 +69,7 @@ const  App = ()=> {
     }}
     onChange={e=>setSearchTerm(e.target.value)}
    />
-   <button onClick={()=>handleSearch(searchTerm)}>Search</button>
+   <button className="search-button" onClick={()=>handleSearch(searchTerm)}>Search</button>
 
    {weatherData.main&& (
      <div className='city'>
