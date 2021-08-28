@@ -18,7 +18,8 @@ const App = () => {
 
 	const success = useCallback((pos) => {
 		var crd = pos.coords;
-		locationAPI([ crd.latitude, crd.longitude ]).then((res) => handleSearch(res.data[0].locality));
+		locationAPI( crd.latitude, crd.longitude ).then((res) => { setSearchTerm(res[0].City);
+       handleSearch(res[0].City)} );
 	}, []);
 
 	const errors = (err) => {

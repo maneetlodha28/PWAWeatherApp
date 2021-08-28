@@ -16,15 +16,19 @@ export const weatherAPI = async(query)=>{
      
 }
 
-export const locationAPI = async(query)=>{
-    const apiKey = '6b70b25edaff7834c8bd62d1a8808ab4'
-  const url = `https://api.positionstack.com/v1/reverse?query=${query}`
+export const locationAPI = async(lat, long)=>{
+  
 
-  const {data} = await axios.get(url, {
-      params:{
-          limit:1,
-           access_key:apiKey
-      }
-  })
+  var options = {
+    method: 'GET',
+    url: 'https://geocodeapi.p.rapidapi.com/GetNearestCities',
+    params: {range: '0', longitude: long, latitude: lat},
+    headers: {
+      'x-rapidapi-host': 'geocodeapi.p.rapidapi.com',
+      'x-rapidapi-key': '055eb8035cmshe88c88165dc52e1p1a5dcajsnbf0b9600b8d0'
+    }
+  };
+  
+  const {data} = await axios.request(options)
   return data;
 }
