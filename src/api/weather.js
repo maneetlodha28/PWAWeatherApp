@@ -18,7 +18,7 @@ export const weatherAPI = async(query)=>{
 
 export const locationAPI = async(query)=>{
     const apiKey = '6b70b25edaff7834c8bd62d1a8808ab4'
-  const url = `http://api.positionstack.com/v1/reverse?query=${query}`
+  const url = `https://api.positionstack.com/v1/reverse?query=${query}`
 
   const {data} = await axios.get(url, {
       params:{
