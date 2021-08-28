@@ -1,25 +1,31 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { locationAPI, weatherAPI } from './api/weather';
-
+import Loader from "react-loader-spinner";
 import './App.css';
 
 const App = () => {
 	const [ searchTerm, setSearchTerm ] = useState('');
-
+  const [loading, setLoading]  = useState(false);
 	const [ weatherData, setWeatherDate ] = useState({});
 	const firstRun = useRef(true);
 	const handleSearch = async (search) => {
+    setWeatherDate({})
+    setLoading(true)
 		weatherAPI(search)
 			.then((response) => {
 				setWeatherDate(response);
+        setLoading(false)
 			})
 			.catch((err) => console.error(err));
 	};
 
 	const success = useCallback((pos) => {
 		var crd = pos.coords;
-		locationAPI( crd.latitude, crd.longitude ).then((res) => { setSearchTerm(res[0].City);
-       handleSearch(res[0].City)} );
+    setLoading(true)
+		locationAPI(crd.latitude, crd.longitude).then((res) => {
+			setSearchTerm(res[0].City);
+			handleSearch(res[0].City);
+		});
 	}, []);
 
 	const errors = (err) => {
@@ -69,6 +75,13 @@ const App = () => {
 			<button className="search-button" onClick={() => handleSearch(searchTerm)}>
 				Search
 			</button>
+      <Loader
+        type="ThreeDots"
+        color="#FFFFFF"
+        height={100}
+        width={60}
+        visible={loading}
+      />
 
 			{weatherData.main && (
 				<div className="city">
