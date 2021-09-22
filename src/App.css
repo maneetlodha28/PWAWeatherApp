@@ -90,6 +90,14 @@ p {
   align-items: center;
 }
 
+.svgText {
+  color:white;
+  
+}
+.svgImage{
+  height:50%;
+  }
+
 @media only screen and (max-width: 600px) {
   .search {
       padding: 20px 15%;
